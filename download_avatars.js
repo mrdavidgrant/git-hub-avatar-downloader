@@ -1,9 +1,8 @@
-var GITHUB_USER = `mrdavidgrant`
-var GITHUB_TOKEN = `fa8f6387375d82ae5fc25e7a1049a92eb896e19a`
+
 var owner = process.argv[2]
 var repo = process.argv[3]
 
-console.log(`Welcome to the GitHub Avatar Downloader!`);
+console.log(`Welcome to the GitHub Avatar Downloader!`)
 
 // Test input to ensure valid
 function testInput(owner, repo){
@@ -18,15 +17,24 @@ function testInput(owner, repo){
 
 //get list of contributors
 function getRepoContributors(repoOwner, repoName, callback) {
-  var request = require('request')
+  const request = require('request')
+  const dotenv = require('dotenv').config('./vars.env')
+  const config = {
+    GITHUB_USER: process.env.GITHUB_USER,
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN
+  }
+
   let options = {
-    url: `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`,
+    url: `https://${config.GITHUB_USER}:${config.GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`,
     headers: {
       'User-Agent': `Student Project`
     }
   }
-  
-  var data = request.get(options, function(err, result,body) {
+  console.log(options)
+  var data = request.get(options, function(error, result, body) {
+    if (error) {
+      console.log("Error: ", result.statusCode)
+    }
     if (result && result.statusCode === 200) {
       var json = JSON.parse(body)
       console.log(`Successfully read ${json.length} items`)
