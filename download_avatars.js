@@ -13,8 +13,7 @@ function getRepoContributors(repoOwner, repoName, callback) {
     }
   }
   
-  var data = request.get(options, function(err, result, body) {
-    console.log("Errors:", err);
+  var data = request.get(options, function(err, result,body) {
     if (result && result.statusCode === 200) {
       var json = JSON.parse(body)
       console.log("read", json.length, "items")
