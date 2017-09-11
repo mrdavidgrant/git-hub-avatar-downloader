@@ -4,7 +4,7 @@ var GITHUB_TOKEN = "fa8f6387375d82ae5fc25e7a1049a92eb896e19a";
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
-function getRepoContributors(repoOwner, repoName) {
+function getRepoContributors(repoOwner, repoName, callback) {
   var request = require('request')
   let options = {
     url: `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`,
@@ -18,7 +18,7 @@ function getRepoContributors(repoOwner, repoName) {
     if (result && result.statusCode === 200) {
       var json = JSON.parse(body)
       console.log("read", json.length, "items")
-      json.forEach(downloadImageByURL)
+      json.forEach(callback)
     }
   })
 }
@@ -34,5 +34,5 @@ function downloadImageByURL (id) {
         .pipe(fs.createWriteStream(`./avatars/${user}.png`))
 }
 
-var contributors = getRepoContributors("jquery", "jquery")
+getRepoContributors("jquery", "jquery", downloadImageByURL)
 // console.log (contributors)
