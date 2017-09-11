@@ -6,7 +6,7 @@ console.log(`Welcome to the GitHub Avatar Downloader!`)
 
 // Test input to ensure valid
 function testInput(owner, repo){
-  if(owner && repo){
+  if(owner && repo && !process.argv[4]){
     getRepoContributors(owner, repo, downloadImageByURL)
   } else {
     console.log(`Please enter an owner and repo name`)
@@ -30,15 +30,13 @@ function getRepoContributors(repoOwner, repoName, callback) {
       'User-Agent': `Student Project`
     }
   }
-  console.log(options)
   var data = request.get(options, function(error, result, body) {
-    if (error) {
-      console.log("Error: ", result.statusCode)
-    }
     if (result && result.statusCode === 200) {
       var json = JSON.parse(body)
       console.log(`Successfully read ${json.length} items`)
       json.forEach(callback)
+    } else if (result.statusCode === 401) {
+      console.log("ERROR: Unauthorized.  Please check username and password in .env file")
     }
   })
 }
