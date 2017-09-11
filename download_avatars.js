@@ -39,8 +39,10 @@ function getRepoContributors(repoOwner, repoName, callback) {
 function downloadImageByURL (id) {
   var request = require('request')
   var fs = require('fs')
+  var mkdirp = require('mkdirp')
   let url = id.avatar_url
   let user = id.login
+  mkdirp('./avatars')
   request.get(url)
         .on('error', function(err) {
           console.log(error)
